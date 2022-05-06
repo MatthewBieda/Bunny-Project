@@ -89,10 +89,18 @@ while Bunnies_exist:
         for sacrificial_bunny in sacrifices:
             initial_bunnies.remove(sacrificial_bunny)
 
+    manual_kill = input("Press k to kill half of the rabbits: ")
+    if manual_kill == "k":
+        sacrifices = sample(initial_bunnies, len(initial_bunnies)//2)
+        for sacrificial_bunny in sacrifices:
+            initial_bunnies.remove(sacrificial_bunny)
+
     #END OF TURN - INCREMENT AGE
 
     for bunny in initial_bunnies:
         bunny.increment_age()
+
+    
 
     time.sleep(2)
 
