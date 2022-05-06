@@ -1,4 +1,5 @@
 from random import choice, randint, sample
+import time
 
 class Bunny():
     value = "bunny rabbit"
@@ -33,13 +34,13 @@ initial_bunnies.sort(key=lambda x: x.age, reverse=True)
 Bunnies_exist = True
 
 while Bunnies_exist:
-
     for bunny in initial_bunnies:
         print(vars(bunny))
     #If male aged 2+ exists, for each female aged 2+, create new bunny
     #filter male bunnies via list comprehension
     #new bunny should have same color as mother
 
+    time.sleep(0.1)
     print("")
 
     mature_males = [bunny for bunny in initial_bunnies if bunny.sex == "male" and bunny.age >=2 and bunny.vampire==False]
@@ -49,6 +50,7 @@ while Bunnies_exist:
         for female in mature_females:
             new_bunny = Bunny("sex",female.colour,"age","name","vampire")
             print(f"{new_bunny.name} was born!")
+            time.sleep(0.1)
             initial_bunnies.append(new_bunny)
 
     #if bunny older than 10, they die (via class method)
@@ -57,10 +59,12 @@ while Bunnies_exist:
 
     for bunny in old_bunnies:
         print(f"{bunny.name} has died")
+        time.sleep(0.1)
         initial_bunnies.remove(bunny)
         
     for vamp_bunny in old_vampire_bunnies:
         print(f"Vampire {vamp_bunny.name} has died")
+        time.sleep(0.1)
         initial_bunnies.remove(vamp_bunny)
         
 
@@ -85,9 +89,10 @@ while Bunnies_exist:
         for sacrificial_bunny in sacrifices:
             initial_bunnies.remove(sacrificial_bunny)
 
-    #END OF TURN
-    #INCREMENT AGE
+    #END OF TURN - INCREMENT AGE
 
     for bunny in initial_bunnies:
         bunny.increment_age()
+
+    time.sleep(2)
 
