@@ -1,4 +1,4 @@
-from random import choice, randint
+from random import choice, randint, sample
 
 class Bunny():
     value = "bunny rabbit"
@@ -18,11 +18,8 @@ class Bunny():
         else:
             self.vampire = False
 
-    def kill_bunny(self):
-        if self.age > 10 and self.vampire==False:
-            print("I died")
-        elif self.age > 50 and self.vampire==True:
-            print("A vampire bunny has died!")
+    def increment_age(self):
+        self.age += 1
 
 bunny1 = Bunny("sex","colour","age","name","vampire")
 bunny2 = Bunny("sex","colour","age","name","vampire")
@@ -33,41 +30,64 @@ bunny5 = Bunny("sex","colour","age","name","vampire")
 initial_bunnies = [bunny1,bunny2,bunny3,bunny4,bunny5]
 initial_bunnies.sort(key=lambda x: x.age, reverse=True)
 
-for bunny in initial_bunnies:
-    print(vars(bunny))
-#If male aged 2+ exists, for each female aged 2+, create new bunny
-#filter male bunnies via list comprehension
-#new bunny should have same color as mother
+Bunnies_exist = True
 
-print("")
-mature_males = [bunny for bunny in initial_bunnies if bunny.sex == "male" and bunny.age >=2 and bunny.vampire==False]
-mature_females = [bunny for bunny in initial_bunnies if bunny.sex == "females" and bunny.age >=2 and bunny.vampire==False]
-for male in mature_males:
-    for female in mature_females:
-        new_bunny = Bunny("sex",female.colour,"age","name","vampire")
-        print(f"{new_bunny.name} was born!")
+while Bunnies_exist:
 
-#if bunny older than 10, they die (via class method)
+    for bunny in initial_bunnies:
+        print(vars(bunny))
+    #If male aged 2+ exists, for each female aged 2+, create new bunny
+    #filter male bunnies via list comprehension
+    #new bunny should have same color as mother
 
-#If a radioactive mutant vampire bunny is born, 
-#each turn it will change one normal bunny into a radioactive vampire bunny.
-#Check for existence of vampire bunnies
+    print("")
 
-vampires = [bunny for bunny in initial_bunnies if bunny.vampire==True]
-normals = [bunny for bunny in initial_bunnies if bunny.vampire==False]
+    mature_males = [bunny for bunny in initial_bunnies if bunny.sex == "male" and bunny.age >=2 and bunny.vampire==False]
+    mature_females = [bunny for bunny in initial_bunnies if bunny.sex == "female" and bunny.age >=2 and bunny.vampire==False]
 
-if vampires:
-    for vampire in vampires:
-        victim = choice(normals)
-        victim.vampire = True
+    for male in mature_males:
+        for female in mature_females:
+            new_bunny = Bunny("sex",female.colour,"age","name","vampire")
+            print(f"{new_bunny.name} was born!")
+            initial_bunnies.append(new_bunny)
 
-if len(initial_bunnies)==0:
-    print("Program has finished")
+    #if bunny older than 10, they die (via class method)
+    old_bunnies = [bunny for bunny in initial_bunnies if bunny.age > 10 and bunny.vampire==False]
+    old_vampire_bunnies = [bunny for bunny in initial_bunnies if bunny.age > 50 and bunny.vampire==True]
 
-if len(initial_bunnies)>1000:
-    sacrifices = choice(initial_bunnies, k=500)
-    initial_bunnies.remove(sacrifices)
+    for bunny in old_bunnies:
+        print(f"{bunny.name} has died")
+        initial_bunnies.remove(bunny)
+        
+    for vamp_bunny in old_vampire_bunnies:
+        print(f"Vampire {vamp_bunny.name} has died")
+        initial_bunnies.remove(vamp_bunny)
+        
 
+    #If a radioactive mutant vampire bunny is born, 
+    #each turn it will change one normal bunny into a radioactive vampire bunny.
+    #Check for existence of vampire bunnies
 
-#End Turn
-#Age += 1
+    vampires = [bunny for bunny in initial_bunnies if bunny.vampire==True]
+    normals = [bunny for bunny in initial_bunnies if bunny.vampire==False]
+
+    if vampires and len(normals):
+        for vampire in vampires:
+            victim = choice(normals)
+            victim.vampire = True
+
+    if len(initial_bunnies)==0:
+        print("Extinction")
+        Bunnies_exist=False
+
+    if len(initial_bunnies)>1000:
+        sacrifices = sample(initial_bunnies, 500)
+        for sacrificial_bunny in sacrifices:
+            initial_bunnies.remove(sacrificial_bunny)
+
+    #END OF TURN
+    #INCREMENT AGE
+
+    for bunny in initial_bunnies:
+        bunny.increment_age()
+
